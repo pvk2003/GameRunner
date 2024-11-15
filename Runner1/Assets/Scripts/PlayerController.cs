@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float LaneDistance = 4;
     public float jumpForce;
     public float Gravity = -20;
+    public float maxSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,12 +21,20 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // if(!PlayerManager.isGameStarted){
+        //     return;
+        // }
+        //Tang toc      
+        if(forwardSpeed < maxSpeed){
+            forwardSpeed += 0.1f*Time.deltaTime;
+        }
+
         direction.z = forwardSpeed;
 
         if (controller.isGrounded)
         {
             // direction.y = 0;
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (SwipeManager.swipeUp)
             {
                 Jump();
             }
@@ -35,13 +44,13 @@ public class PlayerController : MonoBehaviour
             direction.y += Gravity * Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (SwipeManager.swipeRight)
         {
             desiredLane++;
             if (desiredLane == 3)
                 desiredLane = 2;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (SwipeManager.swipeLeft)
         {
             desiredLane--;
             if (desiredLane == -1)
