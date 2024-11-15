@@ -358,6 +358,7 @@
 "Assets/Scripts/CameraController.cs"
 "Assets/Scripts/coin.cs"
 "Assets/Scripts/Events.cs"
+"Assets/Scripts/MainMenu.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/PlayerManager.cs"
 "Assets/Scripts/SwipeManager.cs"
