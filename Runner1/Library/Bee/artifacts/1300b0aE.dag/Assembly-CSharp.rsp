@@ -361,6 +361,7 @@
 "Assets/Scripts/MainMenu.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/PlayerManager.cs"
+"Assets/Scripts/Player_Controller.cs"
 "Assets/Scripts/SwipeManager.cs"
 "Assets/Scripts/TitleManager.cs"
 -langversion:9.0

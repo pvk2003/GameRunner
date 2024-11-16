@@ -28,13 +28,12 @@ public class PlayerController : MonoBehaviour
         if(forwardSpeed < maxSpeed){
             forwardSpeed += 0.1f*Time.deltaTime;
         }
-
         direction.z = forwardSpeed;
 
         if (controller.isGrounded)
         {
             // direction.y = 0;
-            if (SwipeManager.swipeUp)
+            if (Input.GetKeyDown(KeyCode.UpArrow))//SwipeManager.swipeUp
             {
                 Jump();
             }
@@ -43,19 +42,20 @@ public class PlayerController : MonoBehaviour
         {
             direction.y += Gravity * Time.deltaTime;
         }
-
-        if (SwipeManager.swipeRight)
+        //Xử lí chuyển lane 
+        if(Input.GetKeyDown(KeyCode.RightArrow))// (SwipeManager.swipeRight)
         {
             desiredLane++;
             if (desiredLane == 3)
                 desiredLane = 2;
         }
-        if (SwipeManager.swipeLeft)
+        if(Input.GetKeyDown(KeyCode.LeftArrow))// (SwipeManager.swipeLeft)
         {
             desiredLane--;
             if (desiredLane == -1)
                 desiredLane = 0;
         }
+        //Vị trí mục tiêu để chuyển lane
         Vector3 targetPosition = transform.position.z * transform.forward + transform.position.y * transform.up;
         if (desiredLane == 0)
         {
@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
     {
         direction.y = jumpForce;
     }
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.tag == "Obstacle")
