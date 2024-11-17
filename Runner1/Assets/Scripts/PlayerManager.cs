@@ -1,30 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
     public static bool gameOver;
     public GameObject gameOverPanel;
+
+    public static bool isGameStarted;
+    public GameObject startingText;
+    public GameObject newRecordPanel;
+
     public static int numberCoin;
-    public Text coinsText;
-    // Start is called before the first frame update
+    public Text coinsText;  // Hiển thị số lượng Coins
+
+    public static bool isGamePaused;
+
     void Start()
     {
-        gameOver = false;
         numberCoin = 0;
-        gameOverPanel.SetActive(false);
+        Time.timeScale = 1;
+        gameOver = isGameStarted = isGamePaused = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Hiển thị số lượng Coins
+        coinsText.text = "Coins: " + numberCoin;
+
+        // Kiểm tra khi game over
         if (gameOver)
         {
-            Time.timeScale = 0;
-            gameOverPanel.SetActive(true);
+            Time.timeScale = 0;  // Dừng thời gian khi game over
+            gameOverPanel.SetActive(true);  // Hiển thị màn hình game over
         }
-        coinsText.text = "Coins: " + numberCoin;
+
+        // Bắt đầu game khi người chơi chạm
+        if (SwipeManager.tap && !isGameStarted)
+        {
+            isGameStarted = true;
+            Destroy(startingText);  // Xóa thông báo bắt đầu game
+        }
     }
-}
+} 
