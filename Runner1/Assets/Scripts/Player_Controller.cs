@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
 {
+    [SerializeField] CapsuleCollider controller;
     [SerializeField] Transform center_pos;
     [SerializeField] Transform right_pos;
     [SerializeField] Transform left_pos;
@@ -21,6 +22,7 @@ public class Player_Controller : MonoBehaviour
     bool isGameStarted = false;
     bool isGameOver = false;
     bool isSlide = false;
+    bool isGrounded = true;
 
     [SerializeField] Animator player_Animator;
     [SerializeField] private GameObject GameOverPanel;
@@ -35,6 +37,8 @@ public class Player_Controller : MonoBehaviour
 
     void Update()
     {
+        // Kiểm tra nếu nhân vật đang chạm đất
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, controller.height / 2 + 0.1f);
         if (!isGameStarted || !isGameOver)
         {
             if (Input.GetMouseButtonDown(0))
@@ -103,10 +107,11 @@ public class Player_Controller : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded)
             {
                 rb.velocity = Vector3.up * jump_force;
                 StartCoroutine(Jump());
+                isGrounded = false;
             }
             // Trượt khi nhấn mũi tên xuống
             if (Input.GetKeyDown(KeyCode.DownArrow) && !isSlide)
@@ -117,6 +122,7 @@ public class Player_Controller : MonoBehaviour
         if (isGameOver && !GameOverPanel.activeSelf)
         {
             GameOverPanel.SetActive(true);
+            Time.timeScale = 0;
         }
     }
     IEnumerator Jump()
@@ -129,8 +135,21 @@ public class Player_Controller : MonoBehaviour
     IEnumerator Slide()
     {
         isSlide = true;
+
+        // Thay đổi thuộc tính CapsuleCollider
+        Vector3 originalCenter = controller.center;
+        float originalHeight = controller.height;
+
+        controller.center = new Vector3(originalCenter.x, -0.5f, originalCenter.z); // Đặt center y là -0.5
+        controller.height = 1f; // Đặt height là 1
+
         player_Animator.SetInteger("isSlide", 1);
         yield return new WaitForSeconds(1f); // Thời gian trượt
+
+        // Khôi phục lại thuộc tính CapsuleCollider
+        controller.center = originalCenter;
+        controller.height = originalHeight;
+
         player_Animator.SetInteger("isSlide", 0);
         isSlide = false;
     }
