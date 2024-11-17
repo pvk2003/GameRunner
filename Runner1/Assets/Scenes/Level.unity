@@ -2817,8 +2817,10 @@ MonoBehaviour:
   left_pos: {fileID: 1886462534}
   rb: {fileID: 7543381807570653241}
   side_speed: 15
-  running_speed: 15
+  running_speed: 10
   jump_force: 8
+  speedIncrease: 0.1
+  maxRunningSpeed: 50
   player_Animator: {fileID: 2042858728}
   GameOverPanel: {fileID: 974868461}
 --- !u!1660057539 &9223372036854775807
