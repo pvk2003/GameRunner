@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
     public float forwardSpeed;
     private int desiredLane = 1;
-    public float LaneDistance = 4;
+    public float LaneDistance = 2.5f;
     public float jumpForce;
     public float Gravity = -20;
     public float maxSpeed;
@@ -25,8 +25,9 @@ public class PlayerController : MonoBehaviour
         //     return;
         // }
         //Tang toc      
-        if(forwardSpeed < maxSpeed){
-            forwardSpeed += 0.1f*Time.deltaTime;
+        if (forwardSpeed < maxSpeed)
+        {
+            forwardSpeed += 0.1f * Time.deltaTime;
         }
         direction.z = forwardSpeed;
 
@@ -43,13 +44,13 @@ public class PlayerController : MonoBehaviour
             direction.y += Gravity * Time.deltaTime;
         }
         //Xử lí chuyển lane 
-        if(Input.GetKeyDown(KeyCode.RightArrow))// (SwipeManager.swipeRight)
+        if (Input.GetKeyDown(KeyCode.RightArrow))// (SwipeManager.swipeRight)
         {
             desiredLane++;
             if (desiredLane == 3)
                 desiredLane = 2;
         }
-        if(Input.GetKeyDown(KeyCode.LeftArrow))// (SwipeManager.swipeLeft)
+        if (Input.GetKeyDown(KeyCode.LeftArrow))// (SwipeManager.swipeLeft)
         {
             desiredLane--;
             if (desiredLane == -1)
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        controller.Move(direction * Time.fixedDeltaTime);
+        controller.Move(direction * Time.deltaTime);
     }
     private void Jump()
     {
