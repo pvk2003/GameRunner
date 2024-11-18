@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
@@ -27,22 +26,24 @@ public class Player_Controller : MonoBehaviour
 
     [SerializeField] Animator player_Animator;
     [SerializeField] private GameObject GameOverPanel;
-    // [SerializeField] private GameObject tap_to_start_canvas;
 
-    // Start is called before the first frame update
+    // Biến để theo dõi khoảng cách
+    private float distanceTraveled = 0f;
+
     void Start()
     {
         isGameStarted = false;
         isGameOver = false;
         current_pos = 0;
-        running_speed = 10f; // Khởi tạo tốc độ chạy bằng 0
+        running_speed = 10f; // Khởi tạo tốc độ chạy bằng 10
     }
 
     void Update()
     {
         // Kiểm tra nếu nhân vật đang chạm đất
         isGrounded = Physics.Raycast(transform.position, Vector3.down, controller.height / 2 + 0.1f);
-        if (!isGameStarted || !isGameOver)
+        
+        if (!isGameStarted || isGameOver)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -50,7 +51,6 @@ public class Player_Controller : MonoBehaviour
                 isGameStarted = true;
                 player_Animator.SetInteger("isRunning", 1);
                 player_Animator.speed = 1.5f;
-                // tap_to_start_canvas.SetActive(false);
             }
         }
 
@@ -60,61 +60,16 @@ public class Player_Controller : MonoBehaviour
             running_speed += speedIncrease * Time.deltaTime;
             running_speed = Mathf.Clamp(running_speed, 0, maxRunningSpeed); // Giới hạn tốc độ chạy
 
+            // Tính toán khoảng cách đã di chuyển
+            distanceTraveled += running_speed * Time.deltaTime;
+
             // Di chuyển nhân vật về phía trước với tốc độ hiện tại
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + running_speed * Time.deltaTime);
 
-            if (current_pos == 0)
-            {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    current_pos = 1;
-                }
+            // Di chuyển sang trái hoặc phải
+            HandleSideMovement();
 
-                else if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    current_pos = 2;
-                }
-            }
-            else if (current_pos == 1)
-            {
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    current_pos = 0;
-                }
-            }
-            else if (current_pos == 2)
-            {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    current_pos = 0;
-                }
-            }
-
-            if (current_pos == 0)
-            {
-                if (Vector3.Distance(transform.position, new Vector3(center_pos.position.x, transform.position.y, transform.position.z)) >= 0.1f)
-                {
-                    Vector3 dir = new Vector3(center_pos.position.x, transform.position.y, transform.position.z) - transform.position;
-                    transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
-                }
-            }
-            else if (current_pos == 1)
-            {
-                if (Vector3.Distance(transform.position, new Vector3(left_pos.position.x, transform.position.y, transform.position.z)) >= 0.1f)
-                {
-                    Vector3 dir = new Vector3(left_pos.position.x, transform.position.y, transform.position.z) - transform.position;
-                    transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
-                }
-            }
-            else if (current_pos == 2)
-            {
-                if (Vector3.Distance(transform.position, new Vector3(right_pos.position.x, transform.position.y, transform.position.z)) >= 0.1f)
-                {
-                    Vector3 dir = new Vector3(right_pos.position.x, transform.position.y, transform.position.z) - transform.position;
-                    transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
-                }
-            }
-
+            // Nhảy khi nhấn mũi tên lên
             if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded)
             {
                 rb.velocity = Vector3.up * jump_force;
@@ -133,6 +88,27 @@ public class Player_Controller : MonoBehaviour
         {
             GameOverPanel.SetActive(true);
             Time.timeScale = 0;
+        }
+    }
+
+    void HandleSideMovement()
+    {
+        if (current_pos == 0)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) current_pos = 1;
+            else if (Input.GetKeyDown(KeyCode.RightArrow)) current_pos = 2;
+        }
+        else if (current_pos == 1 && Input.GetKeyDown(KeyCode.RightArrow)) current_pos = 0;
+        else if (current_pos == 2 && Input.GetKeyDown(KeyCode.LeftArrow)) current_pos = 0;
+
+        Vector3 targetPos = center_pos.position;
+        if (current_pos == 1) targetPos = left_pos.position;
+        else if (current_pos == 2) targetPos = right_pos.position;
+
+        if (Vector3.Distance(transform.position, new Vector3(targetPos.x, transform.position.y, transform.position.z)) >= 0.1f)
+        {
+            Vector3 dir = targetPos - transform.position;
+            transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
         }
     }
 
@@ -174,5 +150,11 @@ public class Player_Controller : MonoBehaviour
             player_Animator.applyRootMotion = true;
             player_Animator.SetInteger("isDied", 1);
         }
+    }
+
+    // Hàm để lấy khoảng cách đã di chuyển
+    public float GetDistanceTraveled()
+    {
+        return distanceTraveled;
     }
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -14,19 +13,19 @@ public class PlayerManager : MonoBehaviour
     public static int numberCoin;
     public Text coinsText;  // Hiển thị số lượng Coins
 
-    public static bool isGamePaused;
-    // public GameObject[] characterPrefabs;
-    // private void Awake()
-    // {
-    //     int index = PlayerPrefs.GetInt("SelectedCharacter");
-    //     GameObject go = Instantiate(characterPrefabs[index], transform.position, Quaternion.identity);
 
-    // }
+    public static bool isGamePaused;
+
+    // Thêm biến để theo dõi khoảng cách
+
+    private Vector3 startPosition;
+
     void Start()
     {
         numberCoin = 0;
         Time.timeScale = 1;
         gameOver = isGameStarted = isGamePaused = false;
+        startPosition = transform.position;  // Lưu vị trí ban đầu của nhân vật
     }
 
     void Update()
