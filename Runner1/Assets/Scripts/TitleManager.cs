@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +21,7 @@ public class TileManager : MonoBehaviour
         activeTiles = new List<GameObject>();
         for (int i = 0; i < numberOfTiles; i++)
         {
-            if (i == 0)
+            if(i==0)
                 SpawnTile();
             else
                 SpawnTile(Random.Range(0, totalNumOfTiles));
@@ -33,16 +32,16 @@ public class TileManager : MonoBehaviour
     }
     void Update()
     {
-        if (playerTransform.position.z - 30 >= zSpawn - (numberOfTiles * tileLength))
+        if(playerTransform.position.z - 30 >= zSpawn - (numberOfTiles * tileLength))
         {
             int index = Random.Range(0, totalNumOfTiles);
-            while (index == previousIndex)
+            while(index == previousIndex)
                 index = Random.Range(0, totalNumOfTiles);
 
             DeleteTile();
             SpawnTile(index);
         }
-
+            
     }
 
     public void SpawnTile(int index = 0)
@@ -51,7 +50,7 @@ public class TileManager : MonoBehaviour
         if (tile.activeInHierarchy)
             tile = tilePrefabs[index + 8];
 
-        if (tile.activeInHierarchy)
+        if(tile.activeInHierarchy)
             tile = tilePrefabs[index + 16];
 
         tile.transform.position = Vector3.forward * zSpawn;
@@ -67,7 +66,6 @@ public class TileManager : MonoBehaviour
     {
         activeTiles[0].SetActive(false);
         activeTiles.RemoveAt(0);
-        PlayerManager.score += 3;  // Tăng điểm
+        PlayerManager.score += 3;
     }
-
 }
