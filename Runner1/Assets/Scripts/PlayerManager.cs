@@ -35,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     {
         // Hiển thị số lượng Coins
         coinsText.text = "Coins: " + numberCoin;
-        coinsText.text = "Score: " + score;
+        //coinsText.text = "Score: " + score;
         // Kiểm tra khi game over
         if (gameOver)
         {
