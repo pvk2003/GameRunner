@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
@@ -12,12 +9,15 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] Transform left_pos;
     [SerializeField] Rigidbody rb;
 
-
     int current_pos = 0;
 
     public float side_speed;
     public float running_speed;
     public float jump_force;
+
+    // Thêm biến tăng tốc độ
+    public float speedIncrease = 0.1f;  // Tốc độ gia tăng mỗi giây
+    public float maxRunningSpeed = 50f; // Giới hạn tốc độ tối đa
 
     bool isGameStarted = false;
     bool isGameOver = false;
@@ -27,7 +27,6 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] Animator player_Animator;
     [SerializeField] private GameObject GameOverPanel;
 
-    // Start is called before the first frame update
     void Start()
     {
         isGameStarted = false;
@@ -39,7 +38,8 @@ public class Player_Controller : MonoBehaviour
     {
         // Kiểm tra nếu nhân vật đang chạm đất
         isGrounded = Physics.Raycast(transform.position, Vector3.down, controller.height / 2 + 0.1f);
-        if (!isGameStarted || !isGameOver)
+
+        if (!isGameStarted || isGameOver)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -49,62 +49,18 @@ public class Player_Controller : MonoBehaviour
                 player_Animator.speed = 1.5f;
             }
         }
+
         if (isGameStarted)
         {
+            // Tăng tốc độ chạy theo thời gian
+            running_speed += speedIncrease * Time.deltaTime;
+            running_speed = Mathf.Clamp(running_speed, 0, maxRunningSpeed); // Giới hạn tốc độ chạy
+
+            // Di chuyển nhân vật về phía trước với tốc độ hiện tại
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + running_speed * Time.deltaTime);
 
-            if (current_pos == 0)
-            {
-                if (SwipeManager.swipeLeft)
-                {
-                    current_pos = 1;
-                }
-
-                else if (SwipeManager.swipeRight)
-                {
-                    current_pos = 2;
-                }
-            }
-            else if (current_pos == 1)
-            {
-                if (SwipeManager.swipeRight)
-                {
-                    current_pos = 0;
-                }
-            }
-            else if (current_pos == 2)
-            {
-                if (SwipeManager.swipeLeft)
-                {
-                    current_pos = 0;
-                }
-            }
-
-            if (current_pos == 0)
-
-            {
-                if (Vector3.Distance(transform.position, new Vector3(center_pos.position.x, transform.position.y, transform.position.z)) >= 0.1f)
-                {
-                    Vector3 dir = new Vector3(center_pos.position.x, transform.position.y, transform.position.z) - transform.position;
-                    transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
-                }
-            }
-            else if (current_pos == 1)
-            {
-                if (Vector3.Distance(transform.position, new Vector3(left_pos.position.x, transform.position.y, transform.position.z)) >= 0.1f)
-                {
-                    Vector3 dir = new Vector3(left_pos.position.x, transform.position.y, transform.position.z) - transform.position;
-                    transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
-                }
-            }
-            else if (current_pos == 2)
-            {
-                if (Vector3.Distance(transform.position, new Vector3(right_pos.position.x, transform.position.y, transform.position.z)) >= 0.1f)
-                {
-                    Vector3 dir = new Vector3(right_pos.position.x, transform.position.y, transform.position.z) - transform.position;
-                    transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
-                }
-            }
+            // Xử lý di chuyển sang trái, phải
+            HandleSideMovement();
 
             if (SwipeManager.swipeUp && isGrounded)
             {
@@ -118,14 +74,49 @@ public class Player_Controller : MonoBehaviour
             {
                 StartCoroutine(Slide());
             }
-
         }
+
         if (isGameOver && !GameOverPanel.activeSelf)
         {
             GameOverPanel.SetActive(true);
             Time.timeScale = 0;
         }
     }
+
+    void HandleSideMovement()
+{
+    Vector3 targetPos = transform.position; // Lấy vị trí hiện tại làm gốc
+
+    // Xác định vị trí mục tiêu dựa trên trạng thái hiện tại
+    if (current_pos == 0)
+    {
+        if (SwipeManager.swipeLeft) current_pos = 1;
+        else if (SwipeManager.swipeRight) current_pos = 2;
+    }
+    else if (current_pos == 1 && SwipeManager.swipeRight)
+    {
+        current_pos = 0;
+    }
+    else if (current_pos == 2 && SwipeManager.swipeLeft)
+    {
+        current_pos = 0;
+    }
+
+    // Xác định vị trí đích theo trục X dựa trên vị trí trái/phải
+    if (current_pos == 0) targetPos = new Vector3(center_pos.position.x, transform.position.y, transform.position.z);
+    else if (current_pos == 1) targetPos = new Vector3(left_pos.position.x, transform.position.y, transform.position.z);
+    else if (current_pos == 2) targetPos = new Vector3(right_pos.position.x, transform.position.y, transform.position.z);
+
+    // Chỉ di chuyển theo trục X mà vẫn duy trì trục Z (tăng tiến lên phía trước)
+    if (Vector3.Distance(transform.position, targetPos) > 0.1f)
+    {
+        Vector3 dir = targetPos - transform.position;
+        dir.y = 0; // Bỏ trục Y để tránh di chuyển theo chiều dọc
+        transform.Translate(dir.normalized * side_speed * Time.deltaTime, Space.World);
+    }
+}
+
+
     IEnumerator Jump()
     {
         player_Animator.SetInteger("isJump", 1);
