@@ -121,6 +121,9 @@
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -define:UNITY_EDITOR_ONLY_COMPILATION
+-r:"Assets/Sketchfab For Unity/Dependencies/Libraries/GLTFSerialization.dll"
+-r:"Assets/Sketchfab For Unity/Dependencies/Libraries/Ionic.Zip.Unity.dll"
+-r:"Assets/Sketchfab For Unity/Dependencies/Libraries/SketchfabPlugin.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"
@@ -239,10 +242,10 @@
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.Globalization.Extensions.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.Globalization.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.Compression.ZipFile.dll"
+-r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.FileSystem.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.FileSystem.DriveInfo.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.FileSystem.Primitives.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.FileSystem.Watcher.dll"
--r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.FileSystem.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.IsolatedStorage.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.MemoryMappedFiles.dll"
 -r:"D:/Unity/Thư mục mới/2022.3.48f1/Editor/Data/UnityReferenceAssemblies/unity-4.8-api/Facades/System.IO.Pipes.dll"
