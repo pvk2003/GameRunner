@@ -1,6 +1,6 @@
-
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -11,43 +11,55 @@ public class PlayerManager : MonoBehaviour
     public GameObject startingText;
     public GameObject newRecordPanel;
 
-    public static int numberCoin;
-    public Text coinsText;  // Hiển thị số lượng Coins
     public static int score;
-
+    public Text scoreText;
+    public TextMeshProUGUI CoinText;
+    public TextMeshProUGUI newRecordText;
 
     public static bool isGamePaused;
+    // public GameObject[] characterPrefabs;
 
-    // Thêm biến để theo dõi khoảng cách
 
-    private Vector3 startPosition;
+    // private void Awake()
+    // {
+    //     int index = PlayerPrefs.GetInt("SelectedCharacter");
+    //     GameObject go = Instantiate(characterPrefabs[index], transform.position, Quaternion.identity);
+    // }
 
     void Start()
     {
-
-        numberCoin = 0;
+        score = 0;
         Time.timeScale = 1;
         gameOver = isGameStarted = isGamePaused = false;
-        startPosition = transform.position;  // Lưu vị trí ban đầu của nhân vật
+
     }
 
     void Update()
     {
-        // Hiển thị số lượng Coins
-        coinsText.text = "Coins: " + numberCoin;
-        //coinsText.text = "Score: " + score;
-        // Kiểm tra khi game over
+        //Update UI
+        CoinText.text = PlayerPrefs.GetInt("TotalCoins", 0).ToString();
+        scoreText.text = score.ToString();
+
+        //Game Over
         if (gameOver)
         {
-            Time.timeScale = 0;  // Dừng thời gian khi game over
-            gameOverPanel.SetActive(true);  // Hiển thị màn hình game over
+            Time.timeScale = 0;
+            if (score > PlayerPrefs.GetInt("HighScore", 0))
+            {
+                newRecordPanel.SetActive(true);
+                newRecordText.text = "New \nRecord\n" + score;
+                PlayerPrefs.SetInt("HighScore", score);
+            }
+
+            gameOverPanel.SetActive(true);
+            Destroy(gameObject);
         }
 
-        // Bắt đầu game khi người chơi chạm
+        //Start Game
         if (SwipeManager.tap && !isGameStarted)
         {
             isGameStarted = true;
-            Destroy(startingText);  // Xóa thông báo bắt đầu game
+            Destroy(startingText);
         }
     }
 }

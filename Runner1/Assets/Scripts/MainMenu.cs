@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public TextMeshProUGUI highScoreText;
-    public TextMeshProUGUI gemsText;
+    public TextMeshProUGUI CoinText;
 
     // public Animator messageAnim;
 
@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
     private void Update()
     {
         highScoreText.text = "High Score\n" + PlayerPrefs.GetInt("HighScore", 0);
-        gemsText.text = PlayerPrefs.GetInt("TotalGems", 0).ToString();
+        CoinText.text = PlayerPrefs.GetInt("TotalCoins", 0).ToString();
     }
     // Start is called before the first frame update
     public void PlayGames()

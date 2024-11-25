@@ -1,29 +1,24 @@
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class coin : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Rotate(20 * Time.deltaTime, 0, 0);
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            PlayerManager.numberCoin += 1;
-            Debug.Log("Coins: " + PlayerManager.numberCoin);
-            Destroy(this.gameObject);
+            GameObject effect = ObjectPool.instance.GetPooledObject();
+
+            if (effect != null)
+            {
+                effect.transform.position = transform.position;
+                effect.transform.rotation = effect.transform.rotation;
+                effect.SetActive(true);
+            }
+
+            PlayerPrefs.SetInt("TotalCoins", PlayerPrefs.GetInt("TotalCoins", 0) + 1);
             FindObjectOfType<AudioManager>().PlaySound("PickUpCoin");
+            PlayerManager.score += 2;
+            gameObject.SetActive(false);
         }
     }
 }

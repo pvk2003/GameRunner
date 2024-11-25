@@ -85,7 +85,7 @@ public class TileManager : MonoBehaviour
     {
         activeTiles[0].SetActive(false);
         activeTiles.RemoveAt(0);
-        PlayerManager.numberCoin += 3;  // Tăng điểm
+        PlayerManager.score += 3;  // Tăng điểm
     }
 
 }
