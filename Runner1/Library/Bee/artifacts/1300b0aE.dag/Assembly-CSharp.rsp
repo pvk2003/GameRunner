@@ -366,6 +366,7 @@
 "Assets/Scripts/MainMenu.cs"
 "Assets/Scripts/PlayerManager.cs"
 "Assets/Scripts/Player_Controller.cs"
+"Assets/Scripts/Player_Selector.cs"
 "Assets/Scripts/ShopElement.cs"
 "Assets/Scripts/ShopManager.cs"
 "Assets/Scripts/SwipeManager.cs"

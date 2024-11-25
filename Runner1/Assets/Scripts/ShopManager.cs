@@ -4,119 +4,74 @@ using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
-    public ShopElement[] characters;
-
-    public int characterIndex; // 0:Wheel, 1:Amy, 2:Michelle ...
-    public GameObject[] shopCharacters;
-
-    public GameObject rewardMenu;
-    public TextMeshProUGUI rewardText;
-    public GameObject mainMenu;
-    public Button buyButton;
+    public GameObject[] characterModels;
+    public int currentCharacterIndex = 0;
+    public ShopElement [] characters; 
+    public Button buy;
 
     void Start()
-    {
-        // Load the isLocked data for each character
-        foreach (ShopElement c in characters)
-        {
-            if (c.price != 0)
-                c.isLocked = PlayerPrefs.GetInt(c.name, 1) == 1 ? true : false;
+    {   
+        foreach(ShopElement character in characters){
+            if(character.price == 0){
+                character.isLocked= true;
+            }else{
+                character.isLocked = PlayerPrefs.GetInt(character.name, 0) == 0 ? false : true;
+            }
         }
 
-        characterIndex = PlayerPrefs.GetInt("SelectedCharacter", 0);
-        foreach (GameObject ch in shopCharacters)
-        {
-            ch.SetActive(false);
+        currentCharacterIndex = PlayerPrefs.GetInt("SelectedCharacter", 0);
+        foreach(GameObject character in characterModels)
+            character.SetActive(false);
+
+        characterModels[currentCharacterIndex].SetActive(true);
+    }
+    void Update(){
+        UpdateUI();
+    }
+
+    public void ChangeNext(){
+        characterModels[currentCharacterIndex].SetActive(false);
+        currentCharacterIndex++;
+        if(currentCharacterIndex == characterModels.Length)
+            currentCharacterIndex = 0;
+        characterModels[currentCharacterIndex].SetActive(true);
+        ShopElement c = characters[currentCharacterIndex];
+        if(!c.isLocked){
+            return;
         }
-
-        shopCharacters[characterIndex].SetActive(true);
-
-        UpdateUI();
+        PlayerPrefs.SetInt("SelectedCharacter", currentCharacterIndex);
     }
-
-    public void ChangeNextCharacter()
-    {
-        shopCharacters[characterIndex].SetActive(false);
-
-        characterIndex++;
-        if (characterIndex == characters.Length)
-            characterIndex = 0;
-
-        shopCharacters[characterIndex].SetActive(true);
-
-        UpdateUI();
-
-        bool isLocked = characters[characterIndex].isLocked;
-        if (isLocked)
+    public void ChangePrevious(){
+        characterModels[currentCharacterIndex].SetActive(false);
+        currentCharacterIndex--;
+        if(currentCharacterIndex == -1)
+            currentCharacterIndex = characterModels.Length - 1;
+        characterModels[currentCharacterIndex].SetActive(true);
+        ShopElement c = characters[currentCharacterIndex];
+        if(!c.isLocked){
             return;
-
-        PlayerPrefs.SetInt("SelectedCharacter", characterIndex);
-    }
-
-    public void ChangePreviousCharacter()
-    {
-        shopCharacters[characterIndex].SetActive(false);
-
-        characterIndex--;
-        if (characterIndex == -1)
-            characterIndex = characters.Length - 1;
-
-        shopCharacters[characterIndex].SetActive(true);
-
-        UpdateUI();
-
-        bool isLocked = characters[characterIndex].isLocked;
-        if (isLocked)
-            return;
-
-        PlayerPrefs.SetInt("SelectedCharacter", characterIndex);
-    }
-
-    // public void RewardWithAD()
-    // {
-    //     // Nhận thưởng đá quý qua quảng cáo
-    //     int randomReward = Random.Range(100, 251);
-    //     PlayerPrefs.SetInt("TotalGems", PlayerPrefs.GetInt("TotalGems") + randomReward);
-    //     rewardText.text = "You Have Earned " + randomReward;
-    //     rewardMenu.SetActive(true);
-    //     mainMenu.SetActive(false);
-
-    //     UpdateUI();
-    // }
-
-    public void UnlockWithGems()
-    {
-        ShopElement c = characters[characterIndex];
-        if (PlayerPrefs.GetInt("TotalGems", 0) < c.price)
-            return;
-
-        int newGems = PlayerPrefs.GetInt("TotalGems", 0) - characters[characterIndex].price;
-        PlayerPrefs.SetInt("TotalGems", newGems);
-
-        c.isLocked = false;
-        PlayerPrefs.SetInt(c.name, 0);
-        PlayerPrefs.SetInt("SelectedCharacter", characterIndex);
-
-        UpdateUI();
-    }
-
-    private void UpdateUI()
-    {
-        ShopElement c = characters[characterIndex];
-
-        if (c.isLocked)
-        {
-            buyButton.gameObject.SetActive(true);
-            buyButton.GetComponentInChildren<TextMeshProUGUI>().text = c.price + "";
-
-            if (PlayerPrefs.GetInt("TotalGems", 0) < c.price)
-                buyButton.interactable = false;
-            else
-                buyButton.interactable = true;
         }
-        else
-        {
-            buyButton.gameObject.SetActive(false);
+        PlayerPrefs.SetInt("SelectedCharacter", currentCharacterIndex);
+    }
+    public void UnlockeCharacter(){
+        ShopElement c = characters[currentCharacterIndex];
+        PlayerPrefs.SetInt(c.name, 1);
+        PlayerPrefs.SetInt("SelectedCharacter", currentCharacterIndex);
+        c.isLocked= true;
+        PlayerPrefs.SetInt("NumberOfCoins", PlayerPrefs.GetInt("NumberOfCoins", 0) - c.price);
+    }
+    private void UpdateUI(){
+        ShopElement c = characters[currentCharacterIndex];
+        if(c.isLocked){
+            buy.gameObject.SetActive(false);
+        }else{
+            buy.gameObject.SetActive(true);
+            buy.GetComponentInChildren<TextMeshProUGUI>().text = "Buy - " + c.price;
+            if(c.price < PlayerPrefs.GetInt("NumberOfCoins",0)){
+                buy.interactable = true;
+            }else{
+                buy.interactable = false;
+            }
         }
     }
 }
