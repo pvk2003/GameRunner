@@ -1,31 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class MainMenu : MonoBehaviour
 {
-    public TextMeshProUGUI highScoreText;
-    public TextMeshProUGUI CoinText;
+    public TextMeshProUGUI highScoreText;  // UI Text để hiển thị High Score
+    public TextMeshProUGUI coinText;      // UI Text để hiển thị số coin
 
-    // public Animator messageAnim;
+    void Start()
+    {
+        Time.timeScale = 1; // Đảm bảo game không bị pause
+        UpdateUI();         // Cập nhật giao diện khi khởi chạy menu
+    }
 
-    private void Start()
+    void UpdateUI()
     {
-        Time.timeScale = 1;
+        // Hiển thị High Score (quãng đường dài nhất)
+        int highScore = PlayerPrefs.GetInt("HighScore", 0);
+        highScoreText.text = "High Score: " + highScore + " m";
+
+        // Hiển thị tổng số coin
+        coinText.text = PlayerPrefs.GetInt("TotalCoins", 0).ToString();
     }
-    private void Update()
-    {
-        highScoreText.text = "High Score\n" + PlayerPrefs.GetInt("HighScore", 0);
-        CoinText.text = PlayerPrefs.GetInt("TotalCoins", 0).ToString();
-    }
-    // Start is called before the first frame update
+
     public void PlayGames()
     {
-        SceneManager.LoadScene("Level");
+        SceneManager.LoadScene("Level"); // Chuyển sang màn chơi chính
     }
+
     public void QuitGame()
     {
-        Application.Quit();
+        Application.Quit(); // Thoát ứng dụng
+        Debug.Log("Game Quit!");
     }
 }

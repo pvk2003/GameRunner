@@ -1345,7 +1345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highScoreText: {fileID: 1326153407}
-  CoinText: {fileID: 1856668171}
+  coinText: {fileID: 1856668171}
 --- !u!4 &819694512
 Transform:
   m_ObjectHideFlags: 0
@@ -2251,7 +2251,7 @@ GameObject:
   - component: {fileID: 1856668172}
   - component: {fileID: 1856668171}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: CoinText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

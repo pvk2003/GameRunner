@@ -23,5 +23,12 @@ public class DistanceDisplay : MonoBehaviour
 
         // Cập nhật giá trị khoảng cách lên UI
         distanceText.text = "Distance: " + Mathf.FloorToInt(distanceTravelled) + " m";
+        
+        // Lưu quãng đường nếu là High Score mới
+        int currentHighScore = PlayerPrefs.GetInt("HighScore", 0);
+        if (distanceTravelled > currentHighScore)
+        {
+            PlayerPrefs.SetInt("HighScore", Mathf.FloorToInt(distanceTravelled)); // Cập nhật High Score
+        }
     }
 }
