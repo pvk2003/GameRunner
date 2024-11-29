@@ -28,9 +28,9 @@ public class PlayerManager : MonoBehaviour
         gameOver = isGameStarted = isGamePaused = false;
         startPosition = transform.position; // Lưu lại vị trí bắt đầu
 
-        // Hiển thị High Score khi bắt đầu game
-        int highScore = PlayerPrefs.GetInt("HighScore", 0);
-        highScoreText.text = "High Score: " + highScore; // Cập nhật giao diện High Score
+        // // Hiển thị High Score khi bắt đầu game
+        // int highScore = PlayerPrefs.GetInt("HighScore", 0);
+        // highScoreText.text = "High Score: " + highScore; // Cập nhật giao diện High Score
     }
 
     void Update()
