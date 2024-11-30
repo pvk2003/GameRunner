@@ -5,7 +5,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638685641471600166
+      ticks: 638685658769915151
     m_Hash: 2276826352
   m_LockFileStatus:
     m_FilePath: D:/N4/HK-I-(2024-2025)/CongNgheMoi/GameRunner/Runner1/Packages/packages-lock.json
@@ -13,7 +13,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638685641471600166
+      ticks: 638685658769915151
     m_Hash: 1449622516
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
