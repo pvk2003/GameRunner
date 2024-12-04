@@ -22,7 +22,7 @@ public class DistanceDisplay : MonoBehaviour
         distanceTravelled = Mathf.Max(0, distanceTravelled);
 
         // Cập nhật giá trị khoảng cách lên UI
-        distanceText.text = "Distance: " + Mathf.FloorToInt(distanceTravelled) + " m";
+        distanceText.text = "" + Mathf.FloorToInt(distanceTravelled) + " m";
         
         // Lưu quãng đường nếu là High Score mới
         int currentHighScore = PlayerPrefs.GetInt("HighScore", 0);
