@@ -126,6 +126,7 @@ public class Player_Controller : MonoBehaviour
 
     IEnumerator Slide()
     {
+        if(isSlide) yield break;
         isSlide = true;
 
         // Thay đổi thuộc tính CapsuleCollider
@@ -139,8 +140,11 @@ public class Player_Controller : MonoBehaviour
         yield return new WaitForSeconds(1f); // Thời gian trượt
 
         // Khôi phục lại thuộc tính CapsuleCollider
-        controller.center = originalCenter;
-        controller.height = originalHeight;
+        // controller.center = originalCenter;
+        // controller.height = originalHeight;
+
+        controller.center = new Vector3(0f,0f,0f);
+        controller.height = 2f;
 
         player_Animator.SetInteger("isSlide", 0);
         isSlide = false;
