@@ -52,13 +52,13 @@ public class SettingsMenu : MonoBehaviour
     {
         if (isMuted)
         {
-            AudioListener.volume = 1;  // Tắt âm thanh
-            PlayerPrefs.SetInt("Muted", 0); // Lưu trạng thái tắt âm
+            AudioListener.volume = 0;  // Tắt âm thanh
+            PlayerPrefs.SetInt("Muted", 1); // Lưu trạng thái tắt âm
         }
         else
         {
-            AudioListener.volume = 0;  // Bật âm thanh
-            PlayerPrefs.SetInt("Muted", 1); // Lưu trạng thái bật âm
+            AudioListener.volume = 1;  // Bật âm thanh
+            PlayerPrefs.SetInt("Muted", 0); // Lưu trạng thái bật âm
         }
     }
 }

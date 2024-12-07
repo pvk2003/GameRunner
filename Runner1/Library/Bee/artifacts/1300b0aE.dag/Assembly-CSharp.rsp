@@ -371,6 +371,7 @@
 "Assets/Scripts/PlayerManager.cs"
 "Assets/Scripts/Player_Controller.cs"
 "Assets/Scripts/Player_Selector.cs"
+"Assets/Scripts/reset.cs"
 "Assets/Scripts/SettingsMenu.cs"
 "Assets/Scripts/ShopElement.cs"
 "Assets/Scripts/ShopManager.cs"
